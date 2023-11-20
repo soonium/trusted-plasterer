@@ -1,1 +1,4 @@
-export const schemaTypes = []
+import fitter from './fitter'
+
+export const schemaTypes = [fitter]
+
