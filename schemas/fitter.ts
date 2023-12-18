@@ -1,3 +1,5 @@
+
+
 // fitter.ts
 export default {
     name: 'fitter',
@@ -26,6 +28,23 @@ export default {
             title: 'Email',
             type: 'string',
             validation: (Rule: any) => Rule.email().required().error('A valid email is required.'),
+        },
+        {
+          name: 'fitterMugShot',
+          title: 'Fitter Mug Shot',
+          type: 'image',
+          validation: (Rule: any) => Rule.custom((field: any, context: any) => {
+            if (field.asset) {
+              return context.fetch(`*[reference("${field.asset._ref}")][0]`).then((asset: any) => {
+                const sizeInMb = asset.size / 1024 / 1024;
+                if (sizeInMb > 2) { // Limit file size to 2MB
+                  return 'File size is too large. Please upload an image less than 2MB.';
+                }
+                return true;
+              });
+            }
+            return true;
+          })
         },
         {
             name: 'location',
